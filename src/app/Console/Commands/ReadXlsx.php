@@ -43,7 +43,7 @@ class ReadXlsx extends Command{
 
                 $federalEntity=FederalEntity::query()->where(function($query) use ($collect){
                     $query->where('key_data', '=', CleanValues($collect[7]));
-                    $query->where('name', '=', CleanValues($collect[5]));
+                    $query->where('name', '=', CleanValues($collect[4]));
                     $query->where('code', '=', CleanValues($collect[9] ?? ''));
                 })->first();
 
