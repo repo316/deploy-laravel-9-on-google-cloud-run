@@ -50,7 +50,7 @@ class ReadXlsx extends Command{
                 if(!$federalEntity){
                     $idFederalEntity=FederalEntity::create([
                         'key_data'=>CleanValues($collect[7]),
-                        'name'=>CleanValues($collect[5]),
+                        'name'=>CleanValues($collect[4]),
                         'code'=>CleanValues($collect[9] ?? ''),
                     ])->id;
                 }
@@ -111,7 +111,7 @@ class ReadXlsx extends Command{
 
                 $master=Master::query()->where(function($query) use ($collect, $idFederalEntity, $idMunicipality){
                     $query->where('zip_code', '=', CleanValues($collect[0]));
-                    $query->where('locality', '=', CleanValues($collect[4]));
+                    $query->where('locality', '=', CleanValues($collect[5]));
                     $query->where('fk_id_federal_entity', '=', $idFederalEntity);
                     $query->where('fk_id_municipalities', '=', $idMunicipality);
                 })->first();
