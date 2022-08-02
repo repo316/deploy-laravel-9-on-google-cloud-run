@@ -80,6 +80,7 @@ class ZipCodeController extends Controller{
             unset($result['code']);
             unset($result['message']);
         }catch(\Illuminate\Database\QueryException $e){
+            dd($e);
             $status=401;
         }catch(ModelNotFoundException $e){
             $status=404;
