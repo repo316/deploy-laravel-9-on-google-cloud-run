@@ -18,8 +18,13 @@ RUN mkdir -p /app
 COPY . /app
 COPY ./src /app
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/app --filename=composer
+RUN sh -c "wget http://getcomposer.org/composer.phar && chmod a+x composer.phar && mv composer.phar /usr/local/bin/composer"
+RUN cd /app && \
+    /usr/local/bin/composer install --no-dev
 
 RUN chown -R www-data: /app
+
+RUN cd /app && \
+    composer install
 
 CMD sh /app/docker/startup.sh
