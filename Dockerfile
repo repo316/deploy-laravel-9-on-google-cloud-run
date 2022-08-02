@@ -1,5 +1,12 @@
 FROM php:8.1-fpm-alpine
 
+RUN apk add --no-cache libpng libpng-dev && docker-php-ext-install gd && apk del libpng-dev
+RUN apk add --no-cache \
+        libzip-dev \
+        zip \
+  && docker-php-ext-install zip
+
+
 RUN apk add --no-cache nginx wget
 
 RUN mkdir -p /run/nginx
