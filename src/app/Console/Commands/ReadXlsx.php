@@ -40,17 +40,17 @@ class ReadXlsx extends Command{
 
             foreach($collects as $j=>$collect){
                 if($j==0) continue;
-
-                $federalEntity=FederalEntity::query()->where(function($query) use ($collect){
+                $federalEntityName = CleanValues($collect[4]);
+                $federalEntity=FederalEntity::query()->where(function($query) use ($collect,$federalEntityName){
                     $query->where('key_data', '=', CleanValues($collect[7]));
-                    $query->where('name', '=', CleanValues($collect[4]));
+                    $query->where('name', '=', $federalEntityName);
                     $query->where('code', '=', CleanValues($collect[9] ?? ''));
                 })->first();
 
                 if(!$federalEntity){
                     $idFederalEntity=FederalEntity::create([
                         'key_data'=>CleanValues($collect[7]),
-                        'name'=>CleanValues($collect[4]),
+                        'name'=>$federalEntityName,
                         'code'=>CleanValues($collect[9] ?? ''),
                     ])->id;
                 }
@@ -109,9 +109,10 @@ class ReadXlsx extends Command{
                     $idSettlements=$settlements->id;
                 }
 
-                $master=Master::query()->where(function($query) use ($collect, $idFederalEntity, $idMunicipality){
+                $localityName = CleanValues($collect[5]);
+                $master=Master::query()->where(function($query) use ($collect, $idFederalEntity, $idMunicipality,$localityName){
                     $query->where('zip_code', '=', CleanValues($collect[0]));
-                    $query->where('locality', '=', CleanValues($collect[5]));
+                    $query->where('locality', '=', $localityName);
                     $query->where('fk_id_federal_entity', '=', $idFederalEntity);
                     $query->where('fk_id_municipalities', '=', $idMunicipality);
                 })->first();
@@ -119,7 +120,7 @@ class ReadXlsx extends Command{
                 if(!$master){
                     $idMaster=Master::create([
                         'zip_code'=>$collect[0],
-                        'locality'=>CleanValues($collect[4]),
+                        'locality'=>$localityName,
                         'fk_id_federal_entity'=>$idFederalEntity,
                         'fk_id_municipalities'=>$idMunicipality,
                     ])->id;
